@@ -1,6 +1,8 @@
 #ifndef DESIREPATHS_HPP
 #define DESIREPATHS_HPP
 
+#include <cstdint>
+
 #include "Map.hpp"
 #include "CostMap.hpp"
 

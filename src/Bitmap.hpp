@@ -2,7 +2,7 @@
 #define BITMAP_HPP
 
 #include "Map.hpp"
-
+#include <cstdint>
 using Bitmap = Map<std::uint8_t>;
 
 namespace BitmapTransform
