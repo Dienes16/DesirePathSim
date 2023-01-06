@@ -7,6 +7,7 @@
 
 #include "WorldGen.hpp"
 #include "Pathfinding.hpp"
+#include "Version.hpp"
 
 DesirePathSim::DesirePathSim(const Options& options):
    m_options{options},
@@ -134,7 +135,7 @@ DesirePathSim::DesirePathSim(const Options& options):
       m_pathfindingQueue.push(&villager);
    }
 
-   InitWindow(m_options.screenWidthPixels, m_options.screenHeightPixels, "DesirePathSim");
+   InitWindow(m_options.screenWidthPixels, m_options.screenHeightPixels, getAppNameWithVersion());
 
    if (m_options.targetFPS > 0)
    {
