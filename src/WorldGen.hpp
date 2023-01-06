@@ -40,10 +40,12 @@ public:
    void placeRoundaboutsB();
 
 private:
+   static constexpr int m_rngScaledPercentFactor = 1'000;
+
    WorldMap& m_worldMap;
 
    std::mt19937_64& m_rng;
-   std::uniform_int_distribution<> m_rngPercent;
+   std::uniform_int_distribution<> m_rngScaledPercent; // Scaled by m_rngScaledPercentFactor
    std::uniform_int_distribution<std::size_t> m_rngWorldMapWidth;
    std::uniform_int_distribution<std::size_t> m_rngWorldMapHeight;
 

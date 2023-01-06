@@ -5,7 +5,7 @@
 WorldGen::WorldGen(WorldMap& worldMap, std::mt19937_64& rng):
    m_worldMap{worldMap},
    m_rng{rng},
-   m_rngPercent{1, 100},
+   m_rngScaledPercent{1, 100 * m_rngScaledPercentFactor},
    m_rngWorldMapWidth {0, m_worldMap.width () - 1},
    m_rngWorldMapHeight{0, m_worldMap.height() - 1}
 {
@@ -341,8 +341,8 @@ void WorldGen::placeBuildings(const int fillRate)
 
             // Entrance
 #if 1
-            const bool wideEntrance = (m_rngPercent(m_rng) <= 50);
-            const bool fullWidthEntrance = (wideEntrance == true) && (m_rngPercent(m_rng) <= 50);
+            const bool wideEntrance = (m_rngScaledPercent(m_rng) <= 50 * m_rngScaledPercentFactor);
+            const bool fullWidthEntrance = (wideEntrance == true) && (m_rngScaledPercent(m_rng) <= 50 * m_rngScaledPercentFactor);
             const bool fullWidthEntranceSpansEstate = false;
 #else
             const bool wideEntrance = false;
@@ -478,7 +478,7 @@ void WorldGen::placeBuildings(const int fillRate)
       }
    }
 
-   auto applyPatches = [this] (const Pattern& pattern, const std::vector<Patch>& patchVariations, const int fillRate)
+   auto applyPatches = [this] (const Pattern& pattern, const std::vector<Patch>& patchVariations, const int scaledFillRate)
    {
       std::size_t patternPosX = 0;
       std::size_t patternPosY = 0;
@@ -491,7 +491,7 @@ void WorldGen::placeBuildings(const int fillRate)
          if (findPattern(pattern, patternPosX, patternPosY, findStartPosX, findStartPosY) == false)
             break;
 
-         if (m_rngPercent(m_rng) <= fillRate)
+         if (m_rngScaledPercent(m_rng) <= scaledFillRate)
          {
             const auto& patch = patchVariations[std::uniform_int_distribution<std::size_t>{0, patchVariations.size() - 1}(m_rng)];
 
@@ -505,9 +505,9 @@ void WorldGen::placeBuildings(const int fillRate)
 
    for (std::size_t index = patterns.size(); index --> 0;)
    {
-      const int fillRateStep = 100 / patterns.size();
+      const auto scaledFillRate = fillRate * m_rngScaledPercentFactor / static_cast<int>(patterns.size()) * m_rngScaledPercentFactor;
 
-      applyPatches(patterns[index], patches[index], 100 - index * fillRateStep);
+      applyPatches(patterns[index], patches[index], scaledFillRate);
    }
 
    // Rotate
@@ -527,9 +527,9 @@ void WorldGen::placeBuildings(const int fillRate)
 
    for (std::size_t index = patterns.size(); index --> 0;)
    {
-      const int fillRateStep = 100 / patterns.size();
+      const auto scaledFillRate = fillRate * m_rngScaledPercentFactor / static_cast<int>(patterns.size()) * m_rngScaledPercentFactor;
 
-      applyPatches(patterns[index], patches[index], 100 - index * fillRateStep);
+      applyPatches(patterns[index], patches[index], scaledFillRate);
    }
 
    // Rotate
@@ -549,9 +549,9 @@ void WorldGen::placeBuildings(const int fillRate)
 
    for (std::size_t index = patterns.size(); index --> 0;)
    {
-      const int fillRateStep = 100 / patterns.size();
+      const auto scaledFillRate = fillRate * m_rngScaledPercentFactor / static_cast<int>(patterns.size()) * m_rngScaledPercentFactor;
 
-      applyPatches(patterns[index], patches[index], 100 - index * fillRateStep);
+      applyPatches(patterns[index], patches[index], scaledFillRate);
    }
 
    // Rotate
@@ -571,9 +571,9 @@ void WorldGen::placeBuildings(const int fillRate)
 
    for (std::size_t index = patterns.size(); index --> 0;)
    {
-      const int fillRateStep = 100 / patterns.size();
+      const auto scaledFillRate = fillRate * m_rngScaledPercentFactor / static_cast<int>(patterns.size()) * m_rngScaledPercentFactor;
 
-      applyPatches(patterns[index], patches[index], 100 - index * fillRateStep);
+      applyPatches(patterns[index], patches[index], scaledFillRate);
    }
 }
 
@@ -630,7 +630,7 @@ void WorldGen::placeLargeTrees(const int fillRate)
       if (findPattern(oPattern, patternPosX, patternPosY, findStartPosX, findStartPosY) == false)
          break;
 
-      if (m_rngPercent(m_rng) <= fillRate)
+      if (m_rngScaledPercent(m_rng) <= fillRate * m_rngScaledPercentFactor)
       {
          applyPatch(oPatch, patternPosX, patternPosY);
       }
@@ -684,7 +684,7 @@ void WorldGen::placeSmallTrees(const int fillRate)
       if (findPattern(oPattern, patternPosX, patternPosY, findStartPosX, findStartPosY) == false)
          break;
 
-      if (m_rngPercent(m_rng) <= fillRate)
+      if (m_rngScaledPercent(m_rng) <= fillRate * m_rngScaledPercentFactor)
       {
          applyPatch(oPatch, patternPosX, patternPosY);
       }
@@ -768,12 +768,12 @@ void WorldGen::placeRoundaboutsA()
 void WorldGen::placeRoundaboutsB()
 {
    /*
-   ->  .1111.
+         ->  .1111.
    1111  ->  111111
    1111  ->  110011
    1111  ->  110011
    1111  ->  111111
-   ->  .1111.
+         ->  .1111.
    */
 
    Pattern crossingStreetPatternA{4, 5, TileType::Street};
