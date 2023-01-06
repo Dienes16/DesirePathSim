@@ -26,7 +26,7 @@ void decayDesirePaths(DesirePathsMap& desirePathsMap, CostMap& baseCostMap)
    {
       for (std::size_t worldTileX = 0; worldTileX < desirePathsMap.width(); ++worldTileX)
       {
-         adjustDesirePathStress(worldTileX, worldTileY, desirePathsMap, baseCostMap, -1);
+         adjustDesirePathStress(worldTileX, worldTileY, desirePathsMap, baseCostMap, -2);
       }
    }
 }

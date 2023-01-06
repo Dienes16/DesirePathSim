@@ -174,7 +174,7 @@ void DesirePathSim::run()
 
    std::size_t currentDesirePathsMapUpdateIndex = 0;
 
-   float desirePathDecayRatePerSec = 0.25f;
+   float desirePathDecayRatePerSec = 0.5f;
    float desirePathDecayAccu = 0.0f;
 
    float fpsUpdateRatePerSec = 2.0f;
