@@ -483,11 +483,11 @@ void DesirePathSim::updateWorldMapTexture(RenderTexture2D& texture, UpdateRect& 
 
          if (m_worldMap.at(worldTileX, worldTileY) == TileType::Water)
          {
-            if (worldTileY % 3 == 1)
+            if (worldTileY % 3 == 0)
             {
                color = (worldTileX % 3 == 0) ? Color{60, 170, 255, 255} : Color{20, 130, 230, 255};
             }
-            else if (worldTileY % 3 == 0)
+            else if (worldTileY % 3 == 1)
             {
                color = (worldTileX % 3 > 0) ? Color{60, 170, 255, 255} : Color{20, 130, 230, 255};
             }
