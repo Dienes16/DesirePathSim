@@ -219,8 +219,8 @@ void Villager::reset(
    }
    while (spawnX == destinationX && spawnY == destinationY); // Spawn point and destination must differ
 
-   m_position.x = spawnX * tileWidthPixels;
-   m_position.y = spawnY * tileHeightPixels;
+   m_position.x = static_cast<float>(spawnX * tileWidthPixels );
+   m_position.y = static_cast<float>(spawnY * tileHeightPixels);
 
    m_currentPathIndex = 0;
 
@@ -256,7 +256,7 @@ void Villager::reset(
 
       const std::uint8_t factor = isDiagonal ? 14 : 10; // (sqrt(2) * 10) or (1 * 10)
 
-      return (factor * baseCostMap.at(toX, toY));
+      return static_cast<std::int32_t>(factor * baseCostMap.at(toX, toY));
    };
 
    // See http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
@@ -269,7 +269,7 @@ void Villager::reset(
       static constexpr std::size_t d = 10; // 1 * 10
       static constexpr std::size_t d2 = 14; // sqrt(2) * 10
 
-      return (d * (diffX + diffY) + (d2 - 2 * d) * std::min(diffX, diffY));
+      return static_cast<std::int32_t>(d * (diffX + diffY) + (d2 - 2 * d) * std::min(diffX, diffY));
    };
 
    m_path = pathfinder.getPath(spawnX, spawnY, destinationX, destinationY, canTraverse, getTraversalCost, heuristic);

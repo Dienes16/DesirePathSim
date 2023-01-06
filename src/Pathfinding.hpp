@@ -43,19 +43,19 @@ public:
       return true;
    }
 
-   static inline std::uint32_t zeroCost(const std::size_t /*fromX*/, const std::size_t /*fromY*/, const std::size_t /*toX*/, const std::size_t /*toY*/)
+   static inline std::int32_t zeroCost(const std::size_t /*fromX*/, const std::size_t /*fromY*/, const std::size_t /*toX*/, const std::size_t /*toY*/)
    {
       return 0;
    }
 
-   static inline std::uint32_t defaultHeuristic(const std::size_t fromX, const std::size_t fromY, const std::size_t toX, const std::size_t toY)
+   static inline std::int32_t defaultHeuristic(const std::size_t fromX, const std::size_t fromY, const std::size_t toX, const std::size_t toY)
    {
       // Chebyshev distance (diagonals are counted as same distance as orthogonals)
 
       const auto diffX = absDiff(fromX, toX);
       const auto diffY = absDiff(fromY, toY);
 
-      return static_cast<std::uint32_t>(std::max(diffX, diffY));
+      return static_cast<std::int32_t>(std::max(diffX, diffY));
    }
 
 private:

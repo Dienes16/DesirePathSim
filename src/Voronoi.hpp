@@ -12,15 +12,15 @@ using VoronoiMap = Map<std::size_t>;
 
 struct VoronoiCentroid final
 {
-   int x;
-   int y;
+   std::size_t x;
+   std::size_t y;
 };
 
 using VoronoiCentroidList = std::vector<VoronoiCentroid>;
 
 namespace Voronoi
 {
-inline float distanceMinkowski(const int aX, const int aY, const int bX, const int bY, const float p)
+inline float distanceMinkowski(const std::size_t aX, const std::size_t aY, const std::size_t bX, const std::size_t bY, const float p)
 {
    const auto faX = static_cast<float>(aX);
    const auto faY = static_cast<float>(aY);
@@ -30,28 +30,28 @@ inline float distanceMinkowski(const int aX, const int aY, const int bX, const i
    return static_cast<float>(std::pow(std::pow(std::abs(faX - fbX), p) + std::pow(std::abs(faY - fbY), p), 1.0f / p));
 }
 
-inline float distanceManhatten(const int aX, const int aY, const int bX, const int bY)
+inline float distanceManhatten(const std::size_t aX, const std::size_t aY, const std::size_t bX, const std::size_t bY)
 {
    return distanceMinkowski(aX, aY, bX, bY, 1.0f);
 }
 
-inline float distanceEuclidean(const int aX, const int aY, const int bX, const int bY)
+inline float distanceEuclidean(const std::size_t aX, const std::size_t aY, const std::size_t bX, const std::size_t bY)
 {
    return distanceMinkowski(aX, aY, bX, bY, 2.0f);
 }
 
-inline float distanceChebyshev(const int aX, const int aY, const int bX, const int bY)
+inline float distanceChebyshev(const std::size_t aX, const std::size_t aY, const std::size_t bX, const std::size_t bY)
 {
-   return static_cast<float>(std::max(std::abs(aX - bX), std::abs(aY - bY)));
+   return static_cast<float>(std::max((aX > bX ? aX - bX : bX - aX), (aY > bY ? aY - bY : bY - aY)));
 }
 
-inline bool alwaysTruePredicate(const int, const int)
+inline bool alwaysTruePredicate(const std::size_t, const std::size_t)
 {
    return true;
 }
 
 template<typename PredT = decltype(alwaysTruePredicate)>
-VoronoiCentroidList generateCentroids(const int areaLeft, const int areaTop, const int areaWidth, const int areaHeight, const std::size_t count, std::mt19937_64& rng, PredT predicate = alwaysTruePredicate)
+VoronoiCentroidList generateCentroids(const std::size_t areaLeft, const std::size_t areaTop, const std::size_t areaWidth, const std::size_t areaHeight, const std::size_t count, std::mt19937_64& rng, PredT predicate = alwaysTruePredicate)
 {
    VoronoiCentroidList centroidList;
 
@@ -61,15 +61,15 @@ VoronoiCentroidList generateCentroids(const int areaLeft, const int areaTop, con
 
    for (std::size_t counter = 1; counter <= count; ++counter)
    {
-      int x = 0;
-      int y = 0;
+      std::size_t x = 0;
+      std::size_t y = 0;
 
       float minDistanceToOtherCentroids = 0.0f;
 
       do
       {
-         x = std::uniform_int_distribution<>{areaLeft, areaLeft + areaWidth  - 1}(rng);
-         y = std::uniform_int_distribution<>{areaTop , areaTop  + areaHeight - 1}(rng);
+         x = std::uniform_int_distribution<std::size_t>{areaLeft, areaLeft + areaWidth  - 1}(rng);
+         y = std::uniform_int_distribution<std::size_t>{areaTop , areaTop  + areaHeight - 1}(rng);
 
          minDistanceToOtherCentroids = std::numeric_limits<float>::max();
 
@@ -167,7 +167,7 @@ void subdivide(
    VoronoiMap newVoronoiMap{innerVoronoiMapWidth, innerVoronoiMapHeight};
 
    // Create new set of Centroids within the chosen area
-   const auto newCentroids = Voronoi::generateCentroids(topLeftX, topLeftY, newVoronoiMap.width(), newVoronoiMap.height(), centroidCountToAdd, rng, [&] (const int kiX, const int kiY)
+   const auto newCentroids = Voronoi::generateCentroids(topLeftX, topLeftY, newVoronoiMap.width(), newVoronoiMap.height(), centroidCountToAdd, rng, [&] (const std::size_t kiX, const std::size_t kiY)
    {
       return (voronoiMap.at(kiX, kiY) == subdivideCentroidIndex);
    });

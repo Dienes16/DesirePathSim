@@ -52,7 +52,7 @@ bool WorldGen::findPattern(const Pattern& pattern, std::size_t& x, std::size_t& 
    return false;
 }
 
-void WorldGen::applyPatch(const Patch& patch, const int x, const int y)
+void WorldGen::applyPatch(const Patch& patch, const std::size_t x, const std::size_t y)
 {
    for (std::size_t patchY = 0; patchY < patch.height(); ++patchY)
    {

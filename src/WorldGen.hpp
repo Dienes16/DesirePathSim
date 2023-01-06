@@ -49,7 +49,7 @@ private:
 
    bool findPattern(const Pattern& pattern, std::size_t& x, std::size_t& y, const std::size_t startX = 0, const std::size_t startY = 0) const;
 
-   void applyPatch(const Patch& patch, const int x, const int y);
+   void applyPatch(const Patch& patch, const std::size_t x, const std::size_t y);
 
    std::size_t floodFill(const std::size_t x, const std::size_t y, const TileType fillTileType);
 };

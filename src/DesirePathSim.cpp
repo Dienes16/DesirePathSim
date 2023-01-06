@@ -30,7 +30,7 @@ DesirePathSim::DesirePathSim(const Options& options):
    {
       for (std::size_t centroidX = 0; centroidX < m_voronoiMap.width(); ++centroidX)
       {
-         m_voronoiMap.at(centroidX, centroidY) = Voronoi::getShortestDistanceCentroidIndex(centroidX, centroidY, voronoiCentroidList, [this] (const int aX, const int aY, const int bX, const int bY)
+         m_voronoiMap.at(centroidX, centroidY) = Voronoi::getShortestDistanceCentroidIndex(centroidX, centroidY, voronoiCentroidList, [this] (const std::size_t aX, const std::size_t aY, const std::size_t bX, const std::size_t bY)
          {
             return Voronoi::distanceMinkowski(aX, aY, bX, bY, m_options.voronoiLevel0MinkowskiP);
          });
@@ -43,7 +43,7 @@ DesirePathSim::DesirePathSim(const Options& options):
    {
       if (rngPercent(m_baseRNG) <= m_options.voronoiSubdivideProbabilityLevel1)
       {
-         Voronoi::subdivide(voronoiCentroidList, subdivideCentroidIndex, m_voronoiMap, m_options.voronoiCentroidCountPerLevel, m_baseRNG, [this] (const int aX, const int aY, const int bX, const int bY)
+         Voronoi::subdivide(voronoiCentroidList, subdivideCentroidIndex, m_voronoiMap, m_options.voronoiCentroidCountPerLevel, m_baseRNG, [this] (const std::size_t aX, const std::size_t aY, const std::size_t bX, const std::size_t bY)
          {
             return Voronoi::distanceMinkowski(aX, aY, bX, bY, m_options.voronoiLevel1MinkowskiP);
          });
@@ -56,7 +56,7 @@ DesirePathSim::DesirePathSim(const Options& options):
    {
       if (rngPercent(m_baseRNG) <= m_options.voronoiSubdivideProbabilityLevel2)
       {
-         Voronoi::subdivide(voronoiCentroidList, subdivideCentroidIndex, m_voronoiMap, m_options.voronoiCentroidCountPerLevel, m_baseRNG, [this] (const int aX, const int aY, const int bX, const int bY)
+         Voronoi::subdivide(voronoiCentroidList, subdivideCentroidIndex, m_voronoiMap, m_options.voronoiCentroidCountPerLevel, m_baseRNG, [this] (const std::size_t aX, const std::size_t aY, const std::size_t bX, const std::size_t bY)
          {
             return Voronoi::distanceMinkowski(aX, aY, bX, bY, m_options.voronoiLevel2MinkowskiP);
          });
