@@ -9,3 +9,5 @@ add_executable(${PROJECT_NAME} "src/main.cpp" "src/Bitmap.cpp" "src/Villager.cpp
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
