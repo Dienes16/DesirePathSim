@@ -16,11 +16,11 @@ DesirePathSim::DesirePathSim(const Options& options):
    m_worldWidthPixels{m_worldWidthTiles * m_tileWidthPixels},
    m_worldHeightPixels{m_worldHeightTiles * m_tileHeightPixels},
    m_baseRNG{std::random_device{}()},
-   m_voronoiMap{m_worldWidthTiles, m_worldHeightTiles},
-   m_worldMap{m_worldWidthTiles, m_worldHeightTiles, TileType::Grass},
-   m_baseCostMap{m_worldWidthTiles, m_worldHeightTiles, 0},
-   m_desirePathsMap{m_worldWidthTiles, m_worldHeightTiles, 0},
-   m_shadowBitmap{m_worldWidthTiles, m_worldHeightTiles, 0},
+   m_voronoiMap{static_cast<size_t>(m_worldWidthTiles), static_cast<size_t>(m_worldHeightTiles)},
+   m_worldMap{static_cast<size_t>(m_worldWidthTiles), static_cast<size_t>(m_worldHeightTiles), TileType::Grass},
+   m_baseCostMap{static_cast<size_t>(m_worldWidthTiles), static_cast<size_t>(m_worldHeightTiles), 0},
+   m_desirePathsMap{static_cast<size_t>(m_worldWidthTiles), static_cast<size_t>(m_worldHeightTiles), 0},
+   m_shadowBitmap{static_cast<size_t>(m_worldWidthTiles), static_cast<size_t>(m_worldHeightTiles), 0},
    m_villagers{m_options.villagerCount}
 {
    std::uniform_int_distribution<> rngPercent{1, 100};
