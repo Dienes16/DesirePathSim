@@ -23,6 +23,8 @@ DesirePathSim::DesirePathSim(const Options& options):
    m_shadowBitmap{static_cast<size_t>(m_worldWidthTiles), static_cast<size_t>(m_worldHeightTiles), 0},
    m_villagers{m_options.villagerCount}
 {
+   WorldGen worldGen{m_worldMap, m_baseRNG};
+
    std::uniform_int_distribution<> rngPercent{1, 100};
 
    auto voronoiCentroidList = Voronoi::generateCentroids(0, 0, m_voronoiMap.width(), m_voronoiMap.height(), m_options.voronoiCentroidCountPerLevel, m_baseRNG);
@@ -38,6 +40,8 @@ DesirePathSim::DesirePathSim(const Options& options):
       }
    }
 
+   worldGen.placeStreetsFromVoronoiMap(m_voronoiMap, 3);
+
    // Subdivide level 1
 
    for (std::size_t subdivideCentroidIndex = 0; subdivideCentroidIndex < m_options.voronoiCentroidCountPerLevel; ++subdivideCentroidIndex)
@@ -51,6 +55,8 @@ DesirePathSim::DesirePathSim(const Options& options):
       }
    }
 
+   worldGen.placeStreetsFromVoronoiMap(m_voronoiMap, 2);
+
    // Subdivide level 2
 
    for (std::size_t subdivideCentroidIndex = m_options.voronoiCentroidCountPerLevel; subdivideCentroidIndex < m_options.voronoiCentroidCountPerLevel + m_options.voronoiCentroidCountPerLevel * m_options.voronoiCentroidCountPerLevel; ++subdivideCentroidIndex)
@@ -63,6 +69,8 @@ DesirePathSim::DesirePathSim(const Options& options):
          });
       }
    }
+
+   worldGen.placeStreetsFromVoronoiMap(m_voronoiMap, 1);
 
    m_voronoiColorTable.reserve(voronoiCentroidList.size());
 
@@ -80,10 +88,6 @@ DesirePathSim::DesirePathSim(const Options& options):
 
       m_voronoiColorTable.emplace_back(color);
    }
-
-   WorldGen worldGen{m_worldMap, m_baseRNG};
-
-   worldGen.placeStreetsFromVoronoiMap(m_voronoiMap);
 
    if (m_options.placeRoundabouts)
    {
