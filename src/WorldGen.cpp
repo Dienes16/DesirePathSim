@@ -280,8 +280,6 @@ void WorldGen::placeBuildings(const int fillRate)
    000000  ->  .2222.  ->  022220
    ..00..  ->  ..3...  ->  ..30..
    ..11..  ->  ......  ->  ..11..
-   ..11..  ->  ......  ->  ..11..
-   ..00..  ->  ......  ->  ..00..
    */
 
    // Variations in size, corner blocks, L shapes and width of entrance paths
@@ -293,8 +291,8 @@ void WorldGen::placeBuildings(const int fillRate)
 
    const std::size_t minEstateWidth = minBuildingWidth + 2;
    const std::size_t maxEstateWidth = maxBuildingWidth + 2;
-   const std::size_t minEstateHeight = minBuildingHeight + 5;
-   const std::size_t maxEstateHeight = maxBuildingHeight + 5;
+   const std::size_t minEstateHeight = minBuildingHeight + 3;
+   const std::size_t maxEstateHeight = maxBuildingHeight + 15;
 
    std::vector<Pattern> patterns;
    std::vector<std::vector<Patch>> patches; // Inner array is for variations
@@ -313,15 +311,12 @@ void WorldGen::placeBuildings(const int fillRate)
          {
             if (x < 2 || x > pattern.width() - 3)
             {
-               pattern.at(x, estateHeight - 4) = TileType::PatternAny;
-               pattern.at(x, estateHeight - 3) = TileType::PatternAny;
                pattern.at(x, estateHeight - 2) = TileType::PatternAny;
                pattern.at(x, estateHeight - 1) = TileType::PatternAny;
             }
             else
             {
-               pattern.at(x, estateHeight - 3) = TileType::Street;
-               pattern.at(x, estateHeight - 2) = TileType::Street;
+               pattern.at(x, estateHeight - 1) = TileType::Street;
             }
          }
 
@@ -329,7 +324,7 @@ void WorldGen::placeBuildings(const int fillRate)
 
          std::vector<Patch> patchVariations;
 
-         for (std::size_t buildingHeight = minBuildingHeight; buildingHeight <= estateHeight - 5; ++buildingHeight)
+         for (std::size_t buildingHeight = minBuildingHeight; buildingHeight <= std::min(maxBuildingHeight, estateHeight - 3); ++buildingHeight)
          {
             const auto buildingWidth = estateWidth - 2;
 
@@ -348,7 +343,7 @@ void WorldGen::placeBuildings(const int fillRate)
             const bool wideEntrance = (m_rngScaledPercent(m_rng) <= 50 * m_rngScaledPercentFactor);
             const bool fullWidthEntrance = (wideEntrance == true) && (m_rngScaledPercent(m_rng) <= 50 * m_rngScaledPercentFactor);
 
-            for (std::size_t y = 1 + buildingHeight; y < estateHeight - 3; ++y)
+            for (std::size_t y = 1 + buildingHeight; y < estateHeight - 1; ++y)
             {
                for (std::size_t x = 0; x <= buildingWidth + 1; ++x)
                {
