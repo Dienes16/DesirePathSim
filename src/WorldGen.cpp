@@ -98,85 +98,90 @@ std::size_t WorldGen::floodFill(const std::size_t x, const std::size_t y, const 
    return count;
 }
 
-void WorldGen::placeStreetsFromVoronoiMap(const VoronoiMap& voronoiMap)
+void WorldGen::placeStreetsFromVoronoiMap(const VoronoiMap& voronoiMap, const std::size_t streetRadius)
 {
+   auto checkCellsAtDistance = [&] (const std::size_t centerX, const std::size_t centerY, const std::size_t distance)
+   {
+      const auto self = voronoiMap.at(centerX, centerY);
+
+      if (centerX > (distance - 1))
+      {
+         if (centerY > (distance - 1))
+         {
+            if (voronoiMap.at(centerX - distance, centerY - distance) != self)
+            {
+               m_worldMap.at(centerX, centerY) = TileType::Street;
+               return;
+            }
+         }
+
+         if (centerY < voronoiMap.height() - distance)
+         {
+            if (voronoiMap.at(centerX - distance, centerY + distance) != self)
+            {
+               m_worldMap.at(centerX, centerY) = TileType::Street;
+               return;
+            }
+         }
+
+         if (voronoiMap.at(centerX - distance, centerY) != self)
+         {
+            m_worldMap.at(centerX, centerY) = TileType::Street;
+            return;
+         }
+      }
+
+      if (centerX < voronoiMap.width() - distance)
+      {
+         if (centerY > (distance - 1))
+         {
+            if (voronoiMap.at(centerX + distance, centerY - distance) != self)
+            {
+               m_worldMap.at(centerX, centerY) = TileType::Street;
+               return;
+            }
+         }
+
+         if (centerY < voronoiMap.height() - distance)
+         {
+            if (voronoiMap.at(centerX + distance, centerY + distance) != self)
+            {
+               m_worldMap.at(centerX, centerY) = TileType::Street;
+               return;
+            }
+         }
+
+         if (voronoiMap.at(centerX + distance, centerY) != self)
+         {
+            m_worldMap.at(centerX, centerY) = TileType::Street;
+            return;
+         }
+      }
+
+      if (centerY > (distance - 1))
+      {
+         if (voronoiMap.at(centerX, centerY - distance) != self)
+         {
+            m_worldMap.at(centerX, centerY) = TileType::Street;
+            return;
+         }
+      }
+
+      if (centerY < voronoiMap.height() - distance)
+      {
+         if (voronoiMap.at(centerX, centerY + distance) != self)
+         {
+            m_worldMap.at(centerX, centerY) = TileType::Street;
+            return;
+         }
+      }
+   };
+
    for (std::size_t centerY = 0; centerY < voronoiMap.height(); ++centerY)
    {
       for (std::size_t centerX = 0; centerX < voronoiMap.width(); ++centerX)
       {
-         const auto self = voronoiMap.at(centerX, centerY);
-
-         if (centerX > 0)
-         {
-            if (centerY > 0)
-            {
-               if (voronoiMap.at(centerX - 1, centerY - 1) != self)
-               {
-                  m_worldMap.at(centerX, centerY) = TileType::Street;
-                  continue;
-               }
-            }
-
-            if (centerY < voronoiMap.height() - 1)
-            {
-               if (voronoiMap.at(centerX - 1, centerY + 1) != self)
-               {
-                  m_worldMap.at(centerX, centerY) = TileType::Street;
-                  continue;
-               }
-            }
-
-            if (voronoiMap.at(centerX - 1, centerY) != self)
-            {
-               m_worldMap.at(centerX, centerY) = TileType::Street;
-               continue;
-            }
-         }
-
-         if (centerX < voronoiMap.width() - 1)
-         {
-            if (centerY > 0)
-            {
-               if (voronoiMap.at(centerX + 1, centerY - 1) != self)
-               {
-                  m_worldMap.at(centerX, centerY) = TileType::Street;
-                  continue;
-               }
-            }
-
-            if (centerY < voronoiMap.height() - 1)
-            {
-               if (voronoiMap.at(centerX + 1, centerY + 1) != self)
-               {
-                  m_worldMap.at(centerX, centerY) = TileType::Street;
-                  continue;
-               }
-            }
-
-            if (voronoiMap.at(centerX + 1, centerY) != self)
-            {
-               m_worldMap.at(centerX, centerY) = TileType::Street;
-               continue;
-            }
-         }
-
-         if (centerY > 0)
-         {
-            if (voronoiMap.at(centerX, centerY - 1) != self)
-            {
-               m_worldMap.at(centerX, centerY) = TileType::Street;
-               continue;
-            }
-         }
-
-         if (centerY < voronoiMap.height() - 1)
-         {
-            if (voronoiMap.at(centerX, centerY + 1) != self)
-            {
-               m_worldMap.at(centerX, centerY) = TileType::Street;
-               continue;
-            }
-         }
+         checkCellsAtDistance(centerX, centerY, streetRadius);
       }
    }
 }

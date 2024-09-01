@@ -23,7 +23,7 @@ public:
    WorldGen& operator=(const WorldGen&) = default;
    WorldGen& operator=(WorldGen&&) noexcept = default;
 
-   void placeStreetsFromVoronoiMap(const VoronoiMap& voronoiMap);
+   void placeStreetsFromVoronoiMap(const VoronoiMap& voronoiMap, const std::size_t streetRadius = 1);
 
    void placePonds(const float fillLimitInPercent, const float areaSizeLimitInPercent);
 
