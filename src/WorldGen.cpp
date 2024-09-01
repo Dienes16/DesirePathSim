@@ -340,15 +340,8 @@ void WorldGen::placeBuildings(const int fillRate)
             }
 
             // Entrance
-#if 1
             const bool wideEntrance = (m_rngScaledPercent(m_rng) <= 50 * m_rngScaledPercentFactor);
             const bool fullWidthEntrance = (wideEntrance == true) && (m_rngScaledPercent(m_rng) <= 50 * m_rngScaledPercentFactor);
-            const bool fullWidthEntranceSpansEstate = false;
-#else
-            const bool wideEntrance = false;
-            const bool fullWidthEntrance = true;
-            const bool fullWidthEntranceSpansEstate = true;
-#endif
 
             for (std::size_t y = 1 + buildingHeight; y < estateHeight - 3; ++y)
             {
@@ -356,7 +349,7 @@ void WorldGen::placeBuildings(const int fillRate)
                {
                   if (x == 0 || x == buildingWidth + 1)
                   {
-                     if (fullWidthEntrance && fullWidthEntranceSpansEstate)
+                     if (fullWidthEntrance)
                      {
                         patch.at(x, y) = TileType::BuildingEntrance;
                      }
